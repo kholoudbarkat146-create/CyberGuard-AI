@@ -1,40 +1,18 @@
-const suspiciousKeywords = ['login', 'verify', 'update', 'free', 'win', 'account', 'banking', 'secure'];
-                    const lowerUrl = parsedUrl.href.toLowerCase();
-                    
-                    suspiciousKeywords.forEach(keyword => {
-                        if (lowerUrl.includes(keyword) && !parsedUrl.hostname.includes('google') && !parsedUrl.hostname.includes('github') && !parsedUrl.hostname.includes('wikipedia')) {
-                            riskScore += 30;
-                        }
-                    });
-
-                    resultBox.style.display = 'block';
-                    if (riskScore >= 40) {
-                        resultBox.className = 'danger';
-                        resultBox.innerHTML = ⚠️ تحذير: هذا الرابط قد يكون مشبوهاً أو غير آمن! (مستوى الخطورة: ${riskScore}%);
-                    } else {
-                        resultBox.className = 'safe';
-                        resultBox.innerHTML = ✅ الرابط يبدو آمناً للاستخدام والنشر.;
-                    }
-
-                } catch (e) {
-                    resultBox.style.display = 'block';
-                    resultBox.className = 'danger';
-                    resultBox.innerHTML = '❌ الرابط المدخل غير صحيح، تأكد من كتابته بشكل سليم.';
+resultDiv.style.display = 'block';
+                if (score >= 40) {
+                    resultDiv.className = 'danger';
+                    resultDiv.innerHTML = ⚠️ تحذير: هذا الرابط يشتبه في كونـه غير آمن! (مستوى الخطورة: ${score}%);
+                } else {
+                    resultDiv.className = 'safe';
+                    resultDiv.innerHTML = ✅ الرابط يبدو نظامياً وآمناً للاستخدام.;
                 }
+
+            } catch (error) {
+                resultDiv.style.display = 'block';
+                resultDiv.className = 'danger';
+                resultDiv.innerHTML = ❌ الرابط غير صالح، تأكد من الكتابة بشكل صحيح.;
             }
-
-            submitButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                analyzeURL();
-            });
-
-            inputField.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    analyzeURL();
-                }
-            });
-        });
+        }
     </script>
 </body>
 </html>
