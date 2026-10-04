@@ -1,103 +1,41 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberGuard AI - فحص الروابط</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #0f172a;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-            border: 1px solid #334155;
-        }
-        h1 {
-            color: #38bdf8;
-            margin-bottom: 10px;
-        }
-        p {
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #475569;
-            background-color: #0f172a;
-            color: #fff;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #0284c7;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #0369a1;
-        }
-    </style>
-</head>
-<body>
+// فحص كلمات مشبوهة
+                    const suspiciousKeywords = ['login', 'verify', 'update', 'free', 'win', 'account', 'banking', 'secure'];
+                    const lowerUrl = parsedUrl.href.toLowerCase();
+                    
+                    suspiciousKeywords.forEach(keyword => {
+                        if (lowerUrl.includes(keyword) && !parsedUrl.hostname.includes('google') && !parsedUrl.hostname.includes('github') && !parsedUrl.hostname.includes('wikipedia')) {
+                            riskScore += 30;
+                        }
+                    });
 
-    <div class="container">
-        <h1>CyberGuard AI</h1>
-        <p>مساعدك الذكي لتحليل وتأمين الروابط</p>
-        
-        <input type="text" id="urlInput" placeholder="أدخل الرابط هنا لفحصه...">
-        <button onclick="checkUrl()">افحص الآن</button>
-    </div>
+                    resultBox.style.display = 'block';
+                    if (riskScore >= 40) {
+                        resultBox.className = 'danger';
+                        resultBox.innerHTML = ⚠️ تحذير: هذا الرابط قد يكون مشبوهاً أو غير آمن! (مستوى الخطورة: ${riskScore}%);
+                    } else {
+                        resultBox.className = 'safe';
+                        resultBox.innerHTML = ✅ الرابط يبدو آمناً للاستخدام والنشر.;
+                    }
 
-    <script>
-    function checkUrl() {
-        const url = document.getElementById('urlInput').value;
-        if (!url) {
-            alert('الرجاء إدخال رابط أولاً');
-            return;
-        }
+                } catch (e) {
+                    resultBox.style.display = 'block';
+                    resultBox.className = 'danger';
+                    resultBox.innerHTML = '❌ الرابط المدخل غير صحيح، تأكد من كتابته بشكل سليم.';
+                }
+            }
 
-        // إرسال الرابط إلى السيرفر للفحص
-        fetch('/api/analyze', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: url })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // عرض النتيجة للمستخدم
-            alert('حالة الرابط: ' + data.status + ' | نسبة الخطورة: ' + data.riskScore + '%');
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('حدث خطأ أثناء الاتصال بالسيرفر');
+            submitButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                analyzeURL();
+            });
+
+            inputField.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    analyzeURL();
+                }
+            });
         });
-    }
-</script>
-        
-
+    </script>
 </body>
 </html>
