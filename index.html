@@ -1,17 +1,34 @@
-resultDiv.style.display = 'block';
-                if (score >= 40) {
-                    resultDiv.className = 'danger';
-                    resultDiv.innerHTML = ⚠️ تحذير: هذا الرابط يشتبه في كونـه غير آمن! (مستوى الخطورة: ${score}%);
+if (score >= 40) {
+                    statusClass = 'danger';
+                    statusText = <strong>🚨 تحذير أمني خطير!</strong><br>هذا الرابط يشتبه في كونـه غير آمن (مستوى الخطورة: ${score}%)<br><br><ul style="margin-right: 20px;">${details.map(d => <li>${d}</li>).join('')}</ul>;
                 } else {
-                    resultDiv.className = 'safe';
-                    resultDiv.innerHTML = ✅ الرابط يبدو نظامياً وآمناً للاستخدام.;
+                    statusClass = 'safe';
+                    statusText = <strong>✅ الرابط آمن وموثوق.</strong><br>لم يتم رصد تهديدات واضحة في هيكل الرابط.<br><br><ul style="margin-right: 20px;">${details.map(d => <li>${d}</li>).join('')}</ul>;
                 }
 
-            } catch (error) {
-                resultDiv.style.display = 'block';
-                resultDiv.className = 'danger';
-                resultDiv.innerHTML = ❌ الرابط غير صالح، تأكد من الكتابة بشكل صحيح.;
+                resultBox.className = statusClass;
+                resultBox.innerHTML = statusText;
+
+                // إضافة للسجل
+                scanHistory.unshift({ url: urlObj.hostname, safe: score < 40 });
+                updateHistoryUI();
+
+            } catch (err) {
+                resultBox.style.display = 'block';
+                resultBox.className = 'danger';
+                resultBox.innerHTML = '❌ عذراً، الرابط المدخل غير صالح أو غير مكتمل. تأكد من صحة الرابط.';
             }
+        }
+
+        function updateHistoryUI() {
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            scanHistory.slice(0, 5).forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = <span>🌐 ${item.url}</span> <span style="color: ${item.safe ? '#34d399' : '#f87171'}">${item.safe ? 'آمن' : 'مشبوه'}</span>;
+                historyList.appendChild(li);
+            });
         }
     </script>
 </body>
